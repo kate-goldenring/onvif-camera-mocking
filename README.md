@@ -22,7 +22,7 @@ This project consists of tools and instructions for mocking an ONVIF compliant I
     make release
     ```
 ### Start the ONVIF and Discovery services
-1. Run `ifconfig` or `ipconfig` to determine your network interface. If it is not `eno1`, modify the script with your correct interface (such as `eth1`). 
+1. Run `ifconfig` or `ipconfig` to determine your network interface. If it is not `eno1`, modify the script with your correct interface (such as `eth0`, `eth1`, etc). 
 1. Run the start script
     ```sh
     ./scripts/start-onvif-camera.sh
@@ -39,6 +39,18 @@ Use one of the [tools recommended by onvif_srvd for testing the ONVIF service](h
 
     You should see a camera discovered with the same IP address as the machine running the ONVIF server. The name of the device should be TestDev.
 ### Pass an rstp feed through the "camera" (ONVIF service) 
+1. Install gstreamer
+    ```sh
+    sudo apt-get install gstreamer-1.0
+    ```
+1. Install gstreamer RTSP server
+    ```sh
+    sudo apt-get install libgstrtspserver-1.0-dev gstreamer1.0-rtsp 
+    ```
+1. Install the gstreamer plugins needed for x264enc of the stream
+    ```sh
+    sudo apt-get install gstreamer1.0-plugins-ugly
+    ```
 1. Run the Python program that uses `videotestsrc` to pass a fake stream through the camera of a vertical bar moving horizonally. The implementation was modified from this [StackOverflow discussion](https://stackoverflow.com/questions/59858898/how-to-convert-a-video-on-disk-to-a-rtsp-stream).
     ```sh
     sudo python3 rtsp-feed.py 
