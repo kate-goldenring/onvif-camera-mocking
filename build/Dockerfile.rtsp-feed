@@ -1,0 +1,13 @@
+# Build from root of repo with `docker build -t rtsp_feed -f ./build/Dockerfile.rtsp-feed .`
+FROM ubuntu:18.04 as build
+WORKDIR /
+RUN apt update && apt upgrade -y
+# TODO: check if the following package is necessary
+RUN apt install python3-gi -y
+ADD rtsp-feed.py /home/rtsp-feed.py
+RUN apt install \
+    gstreamer-1.0 \
+    libgstrtspserver-1.0-dev gstreamer1.0-rtsp \
+    gstreamer1.0-plugins-ugly -y
+CMD ["/home/rtsp-feed.py"]
+ENTRYPOINT ["python3"]

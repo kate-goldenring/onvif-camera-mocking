@@ -1,0 +1,19 @@
+# Build from root of repo with `docker build -t onvif_build -f ./build/Dockerfile.onvif_build .`
+FROM ubuntu:18.04 as build
+WORKDIR /
+RUN apt update && apt upgrade -y
+RUN apt install \
+    flex bison byacc make m4 autoconf unzip \
+    git g++ wget -y
+RUN git clone https://github.com/kate-goldenring/onvif_srvd.git && \
+    cd onvif_srvd && \
+    git checkout gsoap-2.8.117 && \
+    make release
+RUN git clone https://github.com/kate-goldenring/wsdd.git && \
+    cd wsdd && \
+    git checkout gsoap-2.8.117 && \
+    make release
+
+FROM ubuntu:18.04 
+COPY --from=build /onvif_srvd/onvif_srvd /onvif_srvd/onvif_srvd
+COPY --from=build /wsdd/wsdd /wsdd/wsdd
