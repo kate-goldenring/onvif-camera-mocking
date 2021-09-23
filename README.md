@@ -88,38 +88,38 @@ Alternatively, the following are instructions for using a Rust tool [ONVIF-rs](h
 ### Pass an rstp feed through the "camera" (ONVIF service) 
 Now that we have a camera connected to the network, lets pass some footage through it. This step can be be run as a container or locally.
 #### Option A: Run as a container
-    1. [Install docker](https://docs.docker.com/engine/install/ubuntu/) and pull the container
-        ```
-        sudo docker pull ghcr.io/kate-goldenring/rtsp_feed:latest
-        ```
-    1. Run the container in the background using the host's network
-        ```
-        sudo docker run -d --network host --name rtsp_feed ghcr.io/kate-goldenring/rtsp_feed:latest
-        ```
-    1. If using the ONVIF Device Manager, you should now see a stream coming from the camera of a vertical bar moving horizontally.
+1. [Install docker](https://docs.docker.com/engine/install/ubuntu/) and pull the container
+    ```sh
+    sudo docker pull ghcr.io/kate-goldenring/rtsp_feed:latest
+    ```
+1. Run the container in the background using the host's network
+    ```
+    sudo docker run -d --network host --name rtsp_feed ghcr.io/kate-goldenring/rtsp_feed:latest
+    ```
+1. If using the ONVIF Device Manager, you should now see a stream coming from the camera of a vertical bar moving horizontally.
 
 #### Option B: Run locally
-    1. Install gstreamer
-        ```sh
-        sudo apt-get install gstreamer-1.0
-        ```
-    1. Install gstreamer RTSP server
-        ```sh
-        sudo apt-get install libgstrtspserver-1.0-dev gstreamer1.0-rtsp 
-        ```
-    1. Install the gstreamer plugins needed for x264enc of the stream
-        ```sh
-        sudo apt-get install gstreamer1.0-plugins-ugly
-        ```
-    1. Run the Python program that uses `videotestsrc` to pass a fake stream through the camera of a vertical bar moving horizonally. The implementation was modified from this [StackOverflow discussion](https://stackoverflow.com/questions/59858898/how-to-convert-a-video-on-disk-to-a-rtsp-stream).
-        ```sh
-        sudo python3 rtsp-feed.py 
-        ```
+1. Install gstreamer
+    ```sh
+    sudo apt-get install gstreamer-1.0
+    ```
+1. Install gstreamer RTSP server
+    ```sh
+    sudo apt-get install libgstrtspserver-1.0-dev gstreamer1.0-rtsp 
+    ```
+1. Install the gstreamer plugins needed for x264enc of the stream
+    ```sh
+    sudo apt-get install gstreamer1.0-plugins-ugly
+    ```
+1. Run the Python program that uses `videotestsrc` to pass a fake stream through the camera of a vertical bar moving horizonally. The implementation was modified from this [StackOverflow discussion](https://stackoverflow.com/questions/59858898/how-to-convert-a-video-on-disk-to-a-rtsp-stream).
+    ```sh
+    sudo python3 rtsp-feed.py 
+    ```
 
-        Optionally, configure the color of the feed by passing a color [in decimal format](https://www.mathsisfun.com/hexadecimal-decimal-colors.html) as an argument, such as the following for blue.
-        ```sh
-        sudo python3 rtsp-feed.py 3093194
-        ```
+    Optionally, configure the color of the feed by passing a color [in decimal format](https://www.mathsisfun.com/hexadecimal-decimal-colors.html) as an argument, such as the following for blue.
+    ```sh
+    sudo python3 rtsp-feed.py 3093194
+    ```
 ### Cleanup
 1. Terminate the ONVIF and Discovery services
     ```sh
