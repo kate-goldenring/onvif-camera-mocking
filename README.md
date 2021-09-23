@@ -97,11 +97,7 @@ Now that we have a camera connected to the network, lets pass some footage throu
         sudo docker run -d --network host --name rtsp_feed ghcr.io/kate-goldenring/rtsp_feed:latest
         ```
     1. If using the ONVIF Device Manager, you should now see a stream coming from the camera of a vertical bar moving horizontally.
-    > Note: To clean up, simply stop and remove the container:
-    > ```
-    > sudo docker stop rtsp_feed
-    > sudo docker rm rtsp_feed
-    > ```
+
 #### Option B: Run locally
     1. Install gstreamer
         ```sh
@@ -124,9 +120,19 @@ Now that we have a camera connected to the network, lets pass some footage throu
         ```sh
         sudo python3 rtsp-feed.py 3093194
         ```
-### Terminate the ONVIF and Discovery services
-1. Run `ifconfig` or `ipconfig` to determine your network interface. If it is not `eno1`, modify the script with your correct interface (such as `eth1`). 
-1. Run the start script
+### Cleanup
+1. Terminate the ONVIF and Discovery services
     ```sh
     ./scripts/stop-onvif-camera.sh
+    ```
+    Or if you'd rather 
+    ```sh
+    curl https://raw.githubusercontent.com/kate-goldenring/onvif-camera-mocking/main/scripts/stop-onvif-camera.sh > ./stop-onvif-camera.sh
+    chmod +x ./stop-onvif-camera.sh
+    ./stop-onvif-camera.sh
+    ```
+1. Stop your locally running python program or stop and delete your container:
+    ```
+    sudo docker stop rtsp_feed
+    sudo docker rm rtsp_feed
     ```
