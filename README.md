@@ -28,6 +28,7 @@ Since the ONVIF server and wsdd builds are time consuming and prone to bugs, a c
 1. Remove the docker container
     ```
     sudo docker rm onvif_build
+    sudo docker rmi ghcr.io/kate-goldenring/onvif-build
     ```
 #### Option B: Building
 ##### Build the ONVIF server using [onvif_srvd](https://github.com/KoynovStas/onvif_srvd) 
@@ -135,4 +136,5 @@ Now that we have a camera connected to the network, lets pass some footage throu
     ```
     sudo docker stop rtsp_feed
     sudo docker rm rtsp_feed
+    sudo docker rmi ghcr.io/kate-goldenring/rtsp_feed
     ```
