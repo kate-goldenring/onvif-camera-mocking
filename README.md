@@ -61,7 +61,7 @@ Since the ONVIF server and wsdd builds are time consuming and prone to bugs, a c
 #### Option C: Building with `lxd` (coming soon)
 ### Start the ONVIF and Discovery services
 1. Run `ifconfig` or `ipconfig` to determine your network interface. Then, pass your interface (such as `eno1`,`eth0`, `eth1`, etc) to the script. The following assumes `eth0`. 
-1. Run the start script
+1. Run the start script specifying the network interface and optionally the "mock" firmware version of the camera (defaults to 1.0).
     ```sh
     ./onvif-camera-mocking/scripts/start-onvif-camera.sh eth0
     ```
@@ -69,7 +69,7 @@ Since the ONVIF server and wsdd builds are time consuming and prone to bugs, a c
     ```sh
     curl https://raw.githubusercontent.com/kate-goldenring/onvif-camera-mocking/main/scripts/start-onvif-camera.sh > ./start-onvif-camera.sh
     chmod +x ./start-onvif-camera.sh
-    ./start-onvif-camera.sh eth0
+    ./start-onvif-camera.sh eth0 2.0
     ```
 ### Ensure that the ONVIF camera service is running and discoverable 
 Use one of the [tools recommended by onvif_srvd for testing the ONVIF service](https://github.com/KoynovStas/onvif_srvd#testing). If you have the ONVIF Device Manager installed on a Windows host on the same network as your newly mocked camera, simply open it and confirm that a new camera called "TestDev" exists.
