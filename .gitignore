@@ -1,0 +1,7 @@
+onvif_srvd*
+wsdd*
+nohup.out
+# Ignore output from onvif_srvd
+RECV.log
+SENT.log
+TEST.log
