@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # Run privileged: `sudo /usr/bin/python3 rtsp-feed.py`
 
 import sys
