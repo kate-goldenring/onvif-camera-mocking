@@ -1,4 +1,4 @@
-# Build from root of repo with `docker build -t onvif_build -f ./build/Dockerfile.onvif_build .`
+# Build from root of repo with `docker build -t onvif-build -f ./build/Dockerfile.onvif_build .`
 FROM ubuntu:18.04 as build
 WORKDIR /
 RUN apt update && apt upgrade -y

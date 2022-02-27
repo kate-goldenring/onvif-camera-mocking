@@ -12,16 +12,18 @@ Since the ONVIF server and wsdd builds are time consuming and prone to bugs, a c
     ```
     sudo docker pull ghcr.io/kate-goldenring/onvif-build:latest
     ```
+
+    > Note: for a mock camera that supports the ONVIF [`UpgradeSystemFirmware` endpoint](http://www.onvif.org/onvif/ver10/device/wsdl/devicemgmt.wsdl#op.UpgradeSystemFirmware) pull `ghcr.io/kate-goldenring/onvif-build-fw-upgrade:latest`
 1. Run the container
     ```
     sudo docker run -d --name onvif_build ghcr.io/kate-goldenring/onvif-build:latest
     ```
     > Ensure the container is running with `docker ps -a | grep onvif_build`
-1. Copy over the ONVIF server binary from your home directory
+1. Copy over the ONVIF server binary to the desired directory (i.e. current working directory):
     ```
     sudo docker cp onvif_build:/onvif_srvd/ ./
     ```
-1. Copy over the wsdd binary from your home directory
+1. Copy over the wsdd binary to your home directory
     ```
     sudo docker cp onvif_build:/wsdd/ ./
     ```
@@ -61,7 +63,13 @@ Since the ONVIF server and wsdd builds are time consuming and prone to bugs, a c
 #### Option C: Building with `lxd` (coming soon)
 ### Start the ONVIF and Discovery services
 1. Run `ifconfig` or `ipconfig` to determine your network interface. Then, pass your interface (such as `eno1`,`eth0`, `eth1`, etc) to the script. The following assumes `eth0`. 
-1. Run the start script specifying the network interface and optionally the "mock" firmware version of the camera (defaults to 1.0).
+1. Run the start script specifying the network interface and optionally the resources directory and firmware version of the camera.
+    
+    > The script uses the following arguments and defaults:
+    > - arg1: (mandatory) the network interface
+    > - arg2: (defaults to $PWD) the directory of the onvif_srvd, wsdd, and (if local) rtsp_feed.py program
+    > - arg3: (defaults to 1.0) the "mock" firmware version of the camera.
+
     ```sh
     ./onvif-camera-mocking/scripts/start-onvif-camera.sh eth0
     ```
@@ -69,7 +77,7 @@ Since the ONVIF server and wsdd builds are time consuming and prone to bugs, a c
     ```sh
     curl https://raw.githubusercontent.com/kate-goldenring/onvif-camera-mocking/main/scripts/start-onvif-camera.sh > ./start-onvif-camera.sh
     chmod +x ./start-onvif-camera.sh
-    ./start-onvif-camera.sh eth0 2.0
+    ./start-onvif-camera.sh eth0
     ```
 ### Ensure that the ONVIF camera service is running and discoverable 
 Use one of the [tools recommended by onvif_srvd for testing the ONVIF service](https://github.com/KoynovStas/onvif_srvd#testing). If you have the ONVIF Device Manager installed on a Windows host on the same network as your newly mocked camera, simply open it and confirm that a new camera called "TestDev" exists.
@@ -100,6 +108,10 @@ Now that we have a camera connected to the network, lets pass some footage throu
 1. If using the ONVIF Device Manager, you should now see a stream coming from the camera of a vertical bar moving horizontally.
 
 #### Option B: Run locally
+1. Install goobject instrospection libraries (not needed for Ubuntu 18.04)
+    ```sh
+    sudo apt-get install python3-gi
+    ```
 1. Install gstreamer
     ```sh
     sudo apt-get install gstreamer-1.0
@@ -114,12 +126,12 @@ Now that we have a camera connected to the network, lets pass some footage throu
     ```
 1. Run the Python program that uses `videotestsrc` to pass a fake stream through the camera of a vertical bar moving horizonally. The implementation was modified from this [StackOverflow discussion](https://stackoverflow.com/questions/59858898/how-to-convert-a-video-on-disk-to-a-rtsp-stream).
     ```sh
-    sudo python3 rtsp-feed.py 
+    sudo ./rtsp-feed.py 
     ```
 
     Optionally, configure the color of the feed by passing a color [in decimal format](https://www.mathsisfun.com/hexadecimal-decimal-colors.html) as an argument, such as the following for blue.
     ```sh
-    sudo python3 rtsp-feed.py 3093194
+    sudo ./rtsp-feed.py 3093194
     ```
 ### Cleanup
 1. Terminate the ONVIF and Discovery services
