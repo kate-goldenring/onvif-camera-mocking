@@ -18,3 +18,13 @@ fi
 if pgrep onvif_srvd > /dev/null; then
     sudo pkill -9 onvif_srvd
 fi
+
+# Ask onvif server nicely to terminate.
+if pgrep rtsp-feed.py > /dev/null; then
+    sudo pkill rtsp-feed.py
+fi
+
+# Forcibly terminate.
+if pgrep rtsp-feed.py > /dev/null; then
+    sudo pkill -9 rtsp-feed.py
+fi
