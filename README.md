@@ -79,6 +79,45 @@ Since the ONVIF server and wsdd builds are time consuming and prone to bugs, a c
     chmod +x ./start-onvif-camera.sh
     ./start-onvif-camera.sh eth0
     ```
+#### Option D: Building an "all-in-one" single container for use as a Kubernetes pod
+1. Ensure you have built the wsdd and onvif_srvd binaries per the instructions above and copied
+them into your current working directory. 
+2. Ensure you have copied rtsp-feed.py and scripts/start.sh to you current directory.
+3. copy build/Dockerfile.all-in-one to Dockerfile in your curent directory
+4. run docker build: 
+    ```sh
+    docker build -t onvif_srvd .
+    ```
+5. tag and push the image to your Docker repository
+6. You should now be able to run this as a Kubernetes pod with the following(not this uses hostNetwork):
+```
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: onvif-srvd
+spec:
+  hostNetwork: true
+  dnsPolicy: ClusterFirstWithHostNet
+  containers:
+    - name: onvif-srvd
+      image: <docker-user>/onvif_srvd
+      ports:
+        - containerPort: 3702
+          hostPort: 3702
+          protocol: UDP
+        - containerPort: 1000
+          hostPort: 1000
+          protocol: TCP
+        - containerPort: 8554
+          hostPort: 8554
+          protocol: TCP
+```
+change \<docker-user\> in above to your Dockerhub user account.
+
+
+### Start the ONVIF and Discovery services
+
 ### Ensure that the ONVIF camera service is running and discoverable 
 Use one of the [tools recommended by onvif_srvd for testing the ONVIF service](https://github.com/KoynovStas/onvif_srvd#testing). If you have the ONVIF Device Manager installed on a Windows host on the same network as your newly mocked camera, simply open it and confirm that a new camera called "TestDev" exists.
 
