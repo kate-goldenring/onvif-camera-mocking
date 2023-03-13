@@ -1,0 +1,14 @@
+FROM ubuntu:18.04 
+WORKDIR /
+RUN apt-get update && apt install -y iproute2 lsof && apt install net-tools -y && \
+apt install && apt install tcpdump -y && apt install python3 -y && \
+apt install  python3-gst-1.0 -y && apt install libgstrtspserver-1.0-dev -y && \
+apt install gstreamer1.0-rtsp -y && apt install gstreamer1.0-plugins-ugly -y
+COPY onvif_srvd /
+COPY wsdd /
+COPY rtsp-feed.py /
+COPY start.sh /
+# TODO add discovery tool from https://github.com/lumeohq/onvif-rs helpful for debugging
+# COPY  discovery /discovery
+RUN chmod +x onvif_srvd wsdd start.sh rtsp-feed.py
+ENTRYPOINT [ "sh", "start.sh" ]
